@@ -38,24 +38,29 @@ function changeUrl(serverUrl: String) {
 }
 function confighook() {
   Il2Cpp.perform(() => {
-    const get_configuration = Il2Cpp.domain.assembly("Assembly-CSharp").image.class("Torappu.Network.Networker")
-      .method<Il2Cpp.Object>("get_configuration");
-    get_configuration.implementation = function() {
-      var conf = this.method<Il2Cpp.Object>("get_configuration").invoke();
-      log(conf.field<Il2Cpp.String>("sdkServerUrl").toString());
+    const get_networkConfig = Il2Cpp.domain.assembly("Assembly-CSharp").image.class("Torappu.Network.Networker").method("get_networkConfig")
+    get_networkConfig.implementation = function() {
+      var conf = this.method<Il2Cpp.Object>("get_networkConfig").invoke();
+      //@ts-ignore
+      conf.field("sdkServerUrl").value = "http://192.168.0.7:8000/";//@ts-ignore
+      conf.field("gameServerUrl").value = "http://192.168.0.7:8000/";//@ts-ignore
+      conf.field("u8ServerUrl").value = "http://192.168.0.7:8000/";
       log("hooked config")
       return conf
     };
   });
 }
-function dump(){
-  Il2Cpp.dump("dump.cs","/sdcard/");
+function dump() {
+  Il2Cpp.perform(() => {
+    Il2Cpp.dump("dump.cs")
+  })
 }
 function md5rsahook() {
   Il2Cpp.perform(() => {
     const VerifySignMD5RSA = Il2Cpp.domain.assembly("Assembly-CSharp").image.
       class("Torappu.CryptUtils").method<boolean>("VerifySignMD5RSA");
-    VerifySignMD5RSA.implementation = function(): boolean {
+    //@ts-ignore
+    VerifySignMD5RSA.implementation = function(a: Il2Cpp.String, b: Il2Cpp.String, c: Il2Cpp.String): boolean {
       log("[Il2Cpp Layer]Hooked VerifySignMD5RSA")
       return true;
     };
@@ -64,9 +69,10 @@ function md5rsahook() {
 }
 rpc.exports = {
   init(stage, parameters) {
-    dump()
-    //md5rsahook();
-    //changeUrl("192.168.0.7:8000");
+    //dump()
+    md5rsahook();
+    //confighook();
+    changeUrl("192.168.0.7:8000");
     //fuckACESDK();
   },
   dispose() {

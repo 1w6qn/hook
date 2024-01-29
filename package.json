@@ -5,7 +5,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "frida-compile -o _.js -w index.ts",
+    "build": "frida-compile -o _.js index.ts",
     "attach": "run() { frida -U \"$1\" -l _.js --runtime=v8; }; run",
     "spawn": "run() { frida -U -f \"$1\" -l _.js --no-pause --runtime=v8; }; run",
     "ark-spawn": "npm run spawn com.hypergryph.arknights",
