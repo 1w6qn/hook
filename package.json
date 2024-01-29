@@ -1,0 +1,22 @@
+{
+  "name": "playground",
+  "main": "index.ts",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "frida-compile -o _.js -w index.ts",
+    "attach": "run() { frida -U \"$1\" -l _.js --runtime=v8; }; run",
+    "spawn": "run() { frida -U -f \"$1\" -l _.js --no-pause --runtime=v8; }; run",
+    "ark-spawn": "npm run spawn com.hypergryph.arknights",
+    "ark": "npm run \"明日方舟\"",
+    "app1-spawn": "npm run spawn com.example.application1"
+  },
+  "dependencies": {
+    "@types/frida-gum": "^18.3.1",
+    "frida-compile": "^16.3.0",
+    "frida-il2cpp-bridge": "*",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.1.6"
+  }
+}
