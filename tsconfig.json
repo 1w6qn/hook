@@ -3,7 +3,7 @@
       "target": "esnext",
       "lib": [ "es2022" ],
       "experimentalDecorators": true,
-      "module": "esnext",
+      "module": "NodeNext",
       "allowJs": false,
       "noEmit": false,
       "esModuleInterop": false,

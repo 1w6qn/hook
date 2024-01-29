@@ -48,11 +48,14 @@ function confighook() {
     };
   });
 }
+function dump(){
+  Il2Cpp.dump("dump.cs","/sdcard/");
+}
 function md5rsahook() {
   Il2Cpp.perform(() => {
     const VerifySignMD5RSA = Il2Cpp.domain.assembly("Assembly-CSharp").image.
       class("Torappu.CryptUtils").method<boolean>("VerifySignMD5RSA");
-    VerifySignMD5RSA.implementation = function(a: Il2Cpp.String, b: Il2Cpp.String, c: Il2Cpp.String, d: Il2Cpp.String,): boolean {
+    VerifySignMD5RSA.implementation = function(): boolean {
       log("[Il2Cpp Layer]Hooked VerifySignMD5RSA")
       return true;
     };
@@ -61,9 +64,10 @@ function md5rsahook() {
 }
 rpc.exports = {
   init(stage, parameters) {
-    md5rsahook();
-    changeUrl("192.168.0.7:8000");
-    fuckACESDK();
+    dump()
+    //md5rsahook();
+    //changeUrl("192.168.0.7:8000");
+    //fuckACESDK();
   },
   dispose() {
     log('[dispose]');
