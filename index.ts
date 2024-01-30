@@ -1,11 +1,5 @@
 import "frida-il2cpp-bridge"
-function log(data: string) {
-  var Log = Java.use("android.util.Log");
-
-  var TAG_L = "[FRIDA_SCRIPT]";
-
-  Log.v(TAG_L, data);
-}
+var log=console.log
 
 function fuckACESDK() {
   Java.perform(function() {
