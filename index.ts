@@ -1,4 +1,5 @@
 import "frida-il2cpp-bridge"
+
 var log = console.log
 
 function fuckACESDK() {
@@ -22,10 +23,7 @@ function changeUrl(serverUrl: String) {
     }
     var URL = Java.use("java.net.URL");
     URL.$init.overload('java.lang.String').implementation = function (urlStr) {
-      if (urlStr.match("https://ak-conf.hypergryph.com/config/prod/official/network_config")) {
-        urlStr = `http://${serverUrl}/config/prod/official/network_config`
-        log("[Java Layer]Successfully Change remote_config")
-      }
+      log("[Java Layer]url:" + urlStr)
       return this.$init(urlStr);
     };
   });
@@ -46,10 +44,6 @@ function confighook() {
       log("hooked config")
       return conf
     };
-    Il2Cpp.trace(true)
-      .methods(c)
-      .and()
-      .attach();
   });
   /*
   
@@ -58,6 +52,7 @@ function confighook() {
 function dump() {
   Il2Cpp.perform(() => {
     Il2Cpp.dump("dump.cs")
+    log("[Il2Cpp Layer]Dump Finished")
   })
 }
 function md5rsahook() {
@@ -72,14 +67,33 @@ function md5rsahook() {
 
   });
 }
+function test() {
+  Il2Cpp.perform(() => {
+    log("[Il2Cpp Layer]Trace started")
+    const Networker = Il2Cpp.domain.assembly("Assembly-CSharp").image
+      .class("Torappu.Network.Networker");
+    const SendGet = Networker.method<Il2Cpp.Object>("SendGet");
+
+    //@ts-ignore
+    SendGet.implementation = function (a: Il2Cpp.String, b: Il2Cpp.String) {
+      log("[Il2Cpp Layer]Hooked SendGet")
+      log("[Il2Cpp Layer]Hooked SendGet Url:" + a + " Param:" + b)
+      return this.method("SendGet").invoke(a, b);
+    }
+    const GetOverrideRouterUrl = Networker.method<Il2Cpp.String>("get_overrideRouterUrl");
+    GetOverrideRouterUrl.implementation = function () :Il2Cpp.String{
+      return Il2Cpp.string("http://192.168.0.6:8000/config/prod/official/network_config");
+    }
+    Il2Cpp.trace().classes(Networker).and().attach();
+
+  });
+}
+
 rpc.exports = {
   init(stage, parameters) {
     log("inited")
-    //dump()
-    //md5rsahook();
-    //confighook();
-    //changeUrl("192.168.0.6:8000");
-    //fuckACESDK();
+    test()
+    
   },
   dispose() {
     log('[dispose]');
