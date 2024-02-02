@@ -7,12 +7,12 @@ function NetworkHook(serverUrl: String) {
   Java.perform(function () {
     const sdk = Java.use("com.hypergryph.platform.hgsdk.contants.SDKConst$UrlInfo")
     sdk.getRemoteUrl.implementation = function () {
-      log("[Java Layer]Changed Hypergryph SDK")
+      //log("[Java Layer]Changed Hypergryph SDK")
       return `http://${serverUrl}`
     }
     const sdk2 = Java.use("com.hypergryph.platform.hguseragreement.contans.SDKConst$UrlInfo")
     sdk2.getRemoteUrl.implementation = function () {
-      log("[Java Layer]Changed Hypergryph user agreement")
+      //log("[Java Layer]Changed Hypergryph user agreement")
       return `http://${serverUrl}`
     }
     
@@ -46,7 +46,7 @@ function SignHook() {
     const VerifySignMD5RSA = CryptUtils.method<boolean>("VerifySignMD5RSA");
     //@ts-ignore
     VerifySignMD5RSA.implementation = function (a: Il2Cpp.String, b: Il2Cpp.String, c: Il2Cpp.String): boolean {
-      log("[Il2Cpp Layer]Hooked VerifySignMD5RSA")
+      //log("[Il2Cpp Layer]Hooked VerifySignMD5RSA")
       return true
     };
   });
