@@ -8,21 +8,13 @@ function NetworkHook(serverUrl: String) {
     const sdk = Java.use("com.hypergryph.platform.hgsdk.contants.SDKConst$UrlInfo")
     sdk.getRemoteUrl.implementation = function () {
       //log("[Java Layer]Changed Hypergryph SDK")
-      return `http://${serverUrl}`
+      return `http://${serverUrl}/auth`
     }
     const sdk2 = Java.use("com.hypergryph.platform.hguseragreement.contans.SDKConst$UrlInfo")
     sdk2.getRemoteUrl.implementation = function () {
       //log("[Java Layer]Changed Hypergryph user agreement")
-      return `http://${serverUrl}`
+      return `http://${serverUrl}/auth`
     }
-    
-    /*
-    const URL = Java.use("java.net.URL");
-    URL.$init.overload('java.lang.String').implementation = function (urlStr:string) {
-      log("[Java Layer]url:" + urlStr)
-      return this.$init(urlStr);
-    };
-    */
   });
   Il2Cpp.perform(function(){
     const Networker = Il2Cpp.domain.assembly("Assembly-CSharp").image.class("Torappu.Network.Networker");
